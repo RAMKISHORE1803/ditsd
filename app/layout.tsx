@@ -1,10 +1,6 @@
-import DeployButton from "@/components/deploy-button";
-import { EnvVarWarning } from "@/components/env-var-warning";
 import HeaderAuth from "@/components/header-auth";
-import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/utils/supabase/check-env-vars";
-import { Geist } from "next/font/google";
-import { ThemeProvider } from "next-themes";
+import { Inter } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 
@@ -14,13 +10,13 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "Uganda Digital Infrastructure Mapping",
+  description: "Mapping Uganda's Digital Future: A comprehensive infrastructure visualization platform",
 };
 
-const geistSans = Geist({
-  display: "swap",
+const inter = Inter({
   subsets: ["latin"],
+  display: "swap",
 });
 
 export default function RootLayout({
@@ -29,48 +25,99 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={geistSans.className} suppressHydrationWarning>
+    <html lang="en" className={inter.className} suppressHydrationWarning>
       <body className="bg-background text-foreground">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <main className="min-h-screen flex flex-col items-center">
-            <div className="flex-1 w-full flex flex-col gap-20 items-center">
-              <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-                <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-                  <div className="flex gap-5 items-center font-semibold">
-                    <Link href={"/"}>Next.js Supabase Starter</Link>
-                    <div className="flex items-center gap-2">
-                      <DeployButton />
-                    </div>
-                  </div>
-                  {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
+        <main className="min-h-screen flex flex-col items-center">
+          <div className="flex-1 w-full flex flex-col items-center">
+            <nav className="w-full flex justify-center h-16 fixed top-0 bg-background/80 backdrop-blur-sm z-50 border-b border-b-foreground/5">
+              <div className="w-full max-w-7xl flex justify-between items-center p-3 px-5">
+                <div className="flex gap-5 items-center">
+                  <Link href={"/"} className="font-bold text-lg">
+                    <span style={{ color: 'hsl(var(--uganda-gold))' }}>Uganda</span> Digital Mapping
+                  </Link>
                 </div>
-              </nav>
-              <div className="flex flex-col gap-20 max-w-5xl p-5">
-                {children}
+                <div className="flex items-center gap-4">
+                  <div className="hidden md:flex gap-6 items-center">
+                    <Link href={"#features"} className="hover:text-opacity-70 transition-all">Features</Link>
+                    <Link href={"/map"} className="hover:text-opacity-70 transition-all">Map</Link>
+                    <Link href={"#about"} className="hover:text-opacity-70 transition-all">About</Link>
+                  </div>
+                  {!hasEnvVars ? (
+                    <Link 
+                      href={"/sign-up"} 
+                      className="py-2 px-4 rounded-lg font-medium"
+                      style={{ backgroundColor: 'hsl(var(--uganda-gold))', color: 'white' }}
+                    >
+                      Get Started
+                    </Link>
+                  ) : (
+                    <HeaderAuth />
+                  )}
+                </div>
               </div>
-
-              <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
-                <p>
-                  Powered by{" "}
-                  <a
-                    href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-                    target="_blank"
-                    className="font-bold hover:underline"
-                    rel="noreferrer"
-                  >
-                    Supabase
-                  </a>
-                </p>
-                <ThemeSwitcher />
-              </footer>
+            </nav>
+            <div className="w-full pt-16">
+              {children}
             </div>
-          </main>
-        </ThemeProvider>
+
+            <footer className="w-full py-12 border-t border-t-foreground/10 bg-foreground/5">
+              <div className="container mx-auto px-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                  <div className="col-span-1 md:col-span-2">
+                    <h3 className="font-bold text-lg mb-4">
+                      <span style={{ color: 'hsl(var(--uganda-gold))' }}>Uganda</span> Digital Infrastructure Mapping
+                    </h3>
+                    <p className="text-sm text-foreground/70 max-w-md">
+                      A comprehensive platform for visualizing and analyzing Uganda's digital infrastructure for strategic planning and development.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-3">Resources</h4>
+                    <ul className="space-y-2 text-sm text-foreground/70">
+                      <li><Link href={"#"} className="hover:text-foreground transition-colors">Documentation</Link></li>
+                      <li><Link href={"#"} className="hover:text-foreground transition-colors">API Reference</Link></li>
+                      <li><Link href={"#"} className="hover:text-foreground transition-colors">Support Center</Link></li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-3">Legal</h4>
+                    <ul className="space-y-2 text-sm text-foreground/70">
+                      <li><Link href={"#"} className="hover:text-foreground transition-colors">Privacy Policy</Link></li>
+                      <li><Link href={"#"} className="hover:text-foreground transition-colors">Terms of Service</Link></li>
+                      <li><Link href={"#"} className="hover:text-foreground transition-colors">Data Protection</Link></li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="w-full h-px bg-foreground/10 my-8"></div>
+                <div className="flex flex-col md:flex-row justify-between items-center">
+                  <p className="text-xs text-foreground/60">
+                    © {new Date().getFullYear()} Uganda Digital Infrastructure Mapping. All rights reserved.
+                  </p>
+                  <p className="text-xs text-foreground/60 mt-2 md:mt-0">
+                    Powered by{" "}
+                    <a
+                      href="https://supabase.com/"
+                      target="_blank"
+                      className="hover:underline"
+                      rel="noreferrer"
+                    >
+                      Supabase
+                    </a>{" "}
+                    and{" "}
+                    <a
+                      href="https://nextjs.org/"
+                      target="_blank"
+                      className="hover:underline"
+                      rel="noreferrer"
+                    >
+                      Next.js
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </footer>
+          </div>
+        </main>
       </body>
     </html>
   );
