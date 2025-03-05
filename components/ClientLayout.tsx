@@ -3,25 +3,27 @@
 import { usePathname } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import MapExitButton from '@/components/MapExitButton';
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  
+  // Check for routes that should have different layouts
   const isMapRoute = pathname === '/map';
-
+  const isAdminRoute = pathname === '/admin' || pathname.startsWith('/admin/');
+  const isLoginRoute = pathname === '/login';
+  
+  // Determine if we should show navbar and footer
+  const showNavbarAndFooter = !isMapRoute && !isAdminRoute && !isLoginRoute;
+  
   return (
     <>
-      {isMapRoute ? (
-        <MapExitButton />
-      ) : (
-        <Navbar />
-      )}
+      {showNavbarAndFooter && <Navbar />}
       
-      <div className={`w-full ${isMapRoute ? '' : 'pt-16'}`}>
+      <div className={`w-full ${showNavbarAndFooter ? 'pt-16' : ''}`}>
         {children}
       </div>
       
-      {!isMapRoute && <Footer />}
+      {showNavbarAndFooter && <Footer />}
     </>
   );
 }

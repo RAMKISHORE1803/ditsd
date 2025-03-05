@@ -676,193 +676,147 @@ export default function Home() {
         id="about"
         className="w-full py-24 px-4 relative bg-background overflow-hidden"
       >
-        {/* Background elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `linear-gradient(to bottom right, hsl(var(--uganda-gold) / 5%), hsl(var(--uganda-green) / 5%))`,
-            }}
-          ></div>
-
-          <svg
-            className="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] opacity-10"
-            viewBox="0 0 200 200"
-          >
-            <path
-              fill="hsl(var(--uganda-gold))"
-              d="M47.5,-57.2C62.8,-47.7,77.5,-33.4,80.9,-16.8C84.4,-0.2,76.6,18.8,64.8,32.2C53,45.7,37.1,53.7,20.1,62.5C3.1,71.4,-15,81.1,-28.3,76.2C-41.5,71.3,-50,51.7,-58.4,33.5C-66.9,15.3,-75.3,-1.6,-72,-16.5C-68.6,-31.4,-53.5,-44.3,-38.6,-53.8C-23.8,-63.3,-11.9,-69.4,2.4,-72.4C16.7,-75.4,33.3,-75.1,47.5,-57.2Z"
-              transform="translate(100 100)"
-            />
-          </svg>
-
-          <svg
-            className="absolute -top-[5%] -left-[5%] w-[40%] h-[40%] opacity-10"
-            viewBox="0 0 200 200"
-          >
-            <path
-              fill="hsl(var(--uganda-red))"
-              d="M37,-48.8C51.2,-40.9,68,-33.8,73.5,-21.2C78.9,-8.6,73,9.4,64.4,23.8C55.8,38.2,44.3,49.1,30.7,56.1C17.1,63.1,1.3,66.2,-13.8,63.5C-28.9,60.8,-43.3,52.2,-55,39.9C-66.7,27.5,-75.8,11.3,-74.9,-4.5C-74,-20.3,-63.2,-35.8,-49.4,-44.5C-35.5,-53.3,-18.8,-55.5,-3.5,-51.3C11.8,-47.2,23.7,-36.8,37,-48.8Z"
-              transform="translate(100 100)"
-            />
-          </svg>
-        </div>
-
-        <div className="container mx-auto relative z-10">
-          <motion.div
-            className="max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
+        <div className="bg-slate-50 dark:bg-slate-900 py-16 px-4">
+          <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
-                Ready to Transform Uganda's <br /> Digital Infrastructure?
+              <h2 className="text-3xl md:text-4xl font-semibold mb-4">
+                Transform Uganda's Digital Infrastructure
               </h2>
-              <div
-                className="w-24 h-1 rounded-full mx-auto mb-8"
-                style={{
-                  background: `linear-gradient(45deg, hsl(var(--uganda-gold)), hsl(var(--uganda-red)), hsl(var(--uganda-green)))`,
-                }}
-              ></div>
-              <p className="text-lg mb-10 text-foreground/80 max-w-2xl mx-auto">
-                Join us in building a more connected Uganda through advanced
-                infrastructure mapping and planning tools.
+              <div className="w-16 h-1 bg-[hsl(var(--uganda-gold))] mx-auto mb-6"></div>
+              <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+                Join our platform to build a more connected Uganda through
+                data-driven infrastructure planning.
               </p>
             </div>
 
-            {/* CTA Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <motion.div
-                className="bg-white rounded-2xl overflow-hidden shadow-xl relative group"
-                whileHover={{ y: -5 }}
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 }}
-              >
-                {/* Card gradient border */}
-                <div className="absolute inset-0 p-0.5">
-                  <div
-                    className="absolute inset-0 rounded-2xl"
-                    style={{
-                      background:
-                        "linear-gradient(45deg, hsl(var(--uganda-gold)), hsl(var(--uganda-red)))",
-                      opacity: 0.3,
-                    }}
-                  ></div>
-                </div>
-
-                <div className="relative p-8">
-                  <div className="flex flex-col h-full">
-                    <div
-                      className="mb-6 p-3 rounded-lg inline-flex"
-                      style={{
-                        background:
-                          "linear-gradient(45deg, hsl(var(--uganda-gold) / 20%), hsl(var(--uganda-red) / 10%))",
-                      }}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-12">
+              {/* Government Card */}
+              <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+                <div className="p-6">
+                  <div className="p-2 rounded-full bg-amber-50 dark:bg-amber-900/20 w-12 h-12 flex items-center justify-center mb-4">
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="hsl(var(--uganda-gold))"
+                      strokeWidth="2"
+                      className="stroke-[hsl(var(--uganda-gold))]"
                     >
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="hsl(var(--uganda-gold))"
-                        strokeWidth="2"
-                      >
-                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                      </svg>
-                    </div>
-
-                    <h3 className="text-xl font-semibold mb-2">
-                      Government Partners
-                    </h3>
-                    <p className="text-foreground/70 mb-6 flex-grow">
-                      Collaborate with us to enhance infrastructure planning and
-                      optimize resource allocation for digital initiatives.
-                    </p>
-
-                    <motion.button
-                      className="relative overflow-hidden py-3 px-6 rounded-lg font-medium text-foreground border-2 border-[hsl(var(--uganda-gold))] transition-all duration-300 text-sm group"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <span className="relative z-10 group-hover:text-white transition-colors duration-300">
-                        Join Partnership
-                      </span>
-                      <span className="absolute inset-0 w-full h-full bg-[hsl(var(--uganda-gold))] -z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-                    </motion.button>
+                      <path d="M3 22V12h18v10"></path>
+                      <path d="M12 2L2 9h20z"></path>
+                    </svg>
                   </div>
+                  <h3 className="text-xl font-medium mb-3">
+                    Government Agencies
+                  </h3>
+                  <p className="text-slate-600 dark:text-slate-300 mb-6">
+                    Strategic infrastructure planning and resource optimization
+                    for national digital initiatives.
+                  </p>
+                  <a
+                    href="/gov-partners"
+                    className="inline-block py-2.5 px-4 bg-white dark:bg-slate-700 border border-[hsl(var(--uganda-gold))] text-[hsl(var(--uganda-gold))] rounded font-medium hover:bg-[hsl(var(--uganda-gold))] hover:text-white transition-colors duration-300"
+                  >
+                    Explore Partnership
+                  </a>
                 </div>
-              </motion.div>
+              </div>
 
-              <motion.div
-                className="bg-white rounded-2xl overflow-hidden shadow-xl relative group"
-                whileHover={{ y: -5 }}
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.5 }}
-              >
-                {/* Card gradient border */}
-                <div className="absolute inset-0 p-0.5">
-                  <div
-                    className="absolute inset-0 rounded-2xl"
-                    style={{
-                      background:
-                        "linear-gradient(45deg, hsl(var(--uganda-green)), hsl(var(--uganda-gold)))",
-                      opacity: 0.3,
-                    }}
-                  ></div>
-                </div>
-
-                <div className="relative p-8">
-                  <div className="flex flex-col h-full">
-                    <div
-                      className="mb-6 p-3 rounded-lg inline-flex"
-                      style={{
-                        background:
-                          "linear-gradient(45deg, hsl(var(--uganda-green) / 20%), hsl(var(--uganda-gold) / 10%))",
-                      }}
+              {/* Telecom Card */}
+              <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+                <div className="p-6">
+                  <div className="p-2 rounded-full bg-green-50 dark:bg-green-900/20 w-12 h-12 flex items-center justify-center mb-4">
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      className="stroke-emerald-600 dark:stroke-emerald-400"
                     >
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="hsl(var(--uganda-green))"
-                        strokeWidth="2"
-                      >
-                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                      </svg>
-                    </div>
-
-                    <h3 className="text-xl font-semibold mb-2">
-                      Telecom Providers
-                    </h3>
-                    <p className="text-foreground/70 mb-6 flex-grow">
-                      Leverage our mapping platform to identify coverage gaps
-                      and optimize network expansion strategies.
-                    </p>
-
-                    <motion.button
-                      className="relative overflow-hidden group"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[hsl(var(--uganda-green))] to-[hsl(var(--uganda-gold))] transition-all duration-300 group-hover:scale-105"></span>
-                      <span className="relative block py-3 px-6 rounded-lg font-medium text-white transition-all duration-300 text-sm">
-                        Request Demo
-                      </span>
-                      <span className="absolute bottom-0 left-0 w-full h-1 bg-white/20"></span>
-                    </motion.button>
+                      <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
                   </div>
+                  <h3 className="text-xl font-medium mb-3">
+                    Telecom Providers
+                  </h3>
+                  <p className="text-slate-600 dark:text-slate-300 mb-6">
+                    Identify coverage gaps and optimize network expansion with
+                    precise geographic insights.
+                  </p>
+                  <a
+                    href="/telecom-demo"
+                    className="inline-block py-2.5 px-4 bg-white dark:bg-slate-700 border border-emerald-600 dark:border-emerald-400 text-emerald-600 dark:text-emerald-400 rounded font-medium hover:bg-emerald-600 hover:text-white dark:hover:bg-emerald-500 transition-colors duration-300"
+                  >
+                    Request Demo
+                  </a>
                 </div>
-              </motion.div>
+              </div>
+
+              {/* NGO Card */}
+              <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+                <div className="p-6">
+                  <div className="p-2 rounded-full bg-blue-50 dark:bg-blue-900/20 w-12 h-12 flex items-center justify-center mb-4">
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      className="stroke-blue-600 dark:stroke-blue-400"
+                    >
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="9" cy="7" r="4"></circle>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-medium mb-3">
+                    NGOs & Organizations
+                  </h3>
+                  <p className="text-slate-600 dark:text-slate-300 mb-6">
+                    Enhance project outcomes with data-driven approaches to
+                    connectivity and digital access.
+                  </p>
+                  <a
+                    href="/ngo-resources"
+                    className="inline-block py-2.5 px-4 bg-white dark:bg-slate-700 border border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 rounded font-medium hover:bg-blue-600 hover:text-white dark:hover:bg-blue-500 transition-colors duration-300"
+                  >
+                    Access Resources
+                  </a>
+                </div>
+              </div>
             </div>
-          </motion.div>
+
+            <div className="mt-16 text-center">
+              <p className="text-slate-500 dark:text-slate-400 mb-6 max-w-xl mx-auto">
+                Ready to see how our platform can transform infrastructure
+                planning and development?
+              </p>
+              <a
+                href="/demo"
+                className="inline-flex items-center justify-center py-3 px-6 bg-[hsl(var(--uganda-gold))] text-white rounded font-medium hover:bg-amber-600 transition-colors duration-300"
+              >
+                Schedule Full Platform Demo
+                <svg
+                  className="ml-2 w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
         </div>
       </section>
     </main>

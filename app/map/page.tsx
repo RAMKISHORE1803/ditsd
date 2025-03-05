@@ -918,73 +918,83 @@ export default function MapPage() {
       
       {/* Header/Navbar */}
       <div className="absolute top-0 left-0 right-0 z-10 bg-slate-800/90 backdrop-blur-sm shadow-lg border-b border-slate-700">
-        <div className="container mx-auto px-4 py-2 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Map className="h-6 w-6 text-indigo-400" />
-            <h1 className="text-white font-medium text-lg">Uganda Infrastructure Map</h1>
-          </div>
-          
-          {/* Top navigation buttons */}
-          <div className="flex items-center space-x-2">
-            <button 
-              onClick={() => setIsSearchPanelOpen(!isSearchPanelOpen)}
-              className={`flex items-center space-x-1 px-3 py-1.5 rounded-md transition-colors ${
-                isSearchPanelOpen ? 'bg-indigo-600 text-white' : 'bg-slate-700 text-white/80 hover:bg-slate-600'
-              }`}
-            >
-              <Search className="h-4 w-4" />
-              <span className="text-sm">Search</span>
-            </button>
-            
-            <button 
-              onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
-              className={`flex items-center space-x-1 px-3 py-1.5 rounded-md transition-colors ${
-                isFilterPanelOpen ? 'bg-indigo-600 text-white' : 'bg-slate-700 text-white/80 hover:bg-slate-600'
-              }`}
-            >
-              <Filter className="h-4 w-4" />
-              <span className="text-sm">Filter</span>
-            </button>
-            
-            <div className="flex rounded-md overflow-hidden">
-              <button 
-                onClick={() => setMapMode('standard')}
-                className={`px-3 py-1.5 text-sm border-r border-slate-600 ${
-                  mapMode === 'standard' ? 'bg-indigo-600 text-white' : 'bg-slate-700 text-white/80 hover:bg-slate-600'
-                }`}
-              >
-                Standard
-              </button>
-              <button 
-                onClick={() => setMapMode('satellite')}
-                className={`px-3 py-1.5 text-sm ${
-                  mapMode === 'satellite' ? 'bg-indigo-600 text-white' : 'bg-slate-700 text-white/80 hover:bg-slate-600'
-                }`}
-              >
-                Satellite
-              </button>
-            </div>
-            
-            <div className="flex space-x-1">
-              <button 
-                onClick={exportMapImage}
-                className="bg-slate-700 text-white/80 hover:bg-slate-600 p-1.5 rounded-md transition-colors"
-                title="Export map"
-              >
-                <Download className="h-4 w-4" />
-              </button>
-              
-              <button 
-                onClick={shareMapLink}
-                className="bg-slate-700 text-white/80 hover:bg-slate-600 p-1.5 rounded-md transition-colors"
-                title="Share map"
-              >
-                <Share2 className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-        </div>
+  <div className="container mx-auto px-4 py-2 flex items-center justify-between">
+    <div className="flex items-center space-x-2 pl-28">
+      <Map className="h-6 w-6 text-indigo-400" />
+      <h1 className="text-white font-medium text-lg">Uganda Infrastructure Map</h1>
+    </div>
+    
+    {/* Top navigation buttons */}
+    <div className="flex items-center space-x-2">
+      <button 
+        onClick={() => setIsSearchPanelOpen(!isSearchPanelOpen)}
+        className={`flex items-center space-x-1 px-3 py-1.5 rounded-md transition-colors ${
+          isSearchPanelOpen ? 'bg-indigo-600 text-white' : 'bg-slate-700 text-white/80 hover:bg-slate-600'
+        }`}
+      >
+        <Search className="h-4 w-4" />
+        <span className="text-sm">Search</span>
+      </button>
+      
+      <button 
+        onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
+        className={`flex items-center space-x-1 px-3 py-1.5 rounded-md transition-colors ${
+          isFilterPanelOpen ? 'bg-indigo-600 text-white' : 'bg-slate-700 text-white/80 hover:bg-slate-600'
+        }`}
+      >
+        <Filter className="h-4 w-4" />
+        <span className="text-sm">Filter</span>
+      </button>
+      
+      <div className="flex rounded-md overflow-hidden">
+        <button 
+          onClick={() => setMapMode('standard')}
+          className={`px-3 py-1.5 text-sm border-r border-slate-600 ${
+            mapMode === 'standard' ? 'bg-indigo-600 text-white' : 'bg-slate-700 text-white/80 hover:bg-slate-600'
+          }`}
+        >
+          Standard
+        </button>
+        <button 
+          onClick={() => setMapMode('satellite')}
+          className={`px-3 py-1.5 text-sm ${
+            mapMode === 'satellite' ? 'bg-indigo-600 text-white' : 'bg-slate-700 text-white/80 hover:bg-slate-600'
+          }`}
+        >
+          Satellite
+        </button>
       </div>
+      
+      <div className="flex space-x-1">
+        <button 
+          onClick={exportMapImage}
+          className="bg-slate-700 text-white/80 hover:bg-slate-600 p-1.5 rounded-md transition-colors"
+          title="Export map"
+        >
+          <Download className="h-4 w-4" />
+        </button>
+        
+        <button 
+          onClick={shareMapLink}
+          className="bg-slate-700 text-white/80 hover:bg-slate-600 p-1.5 rounded-md transition-colors"
+          title="Share map"
+        >
+          <Share2 className="h-4 w-4" />
+        </button>
+        
+        {/* Exit Map Button */}
+        <button 
+          onClick={() => window.location.href = '/'}
+          className="bg-red-600 text-white hover:bg-red-700 p-1.5 rounded-md transition-colors flex items-center space-x-1 px-3"
+          title="Exit map"
+        >
+          <X className="h-4 w-4 mr-1" />
+          <span className="text-sm">Exit</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
       
       {/* Search Panel */}
       {isSearchPanelOpen && (
@@ -1520,7 +1530,6 @@ export default function MapPage() {
           </div>
           <pre className="whitespace-pre-wrap">{JSON.stringify(debug, null, 2)}</pre>
         </div> */}
-      )}
     </div>
   ) 
 }
