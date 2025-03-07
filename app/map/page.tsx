@@ -991,6 +991,13 @@ export default function MapPage() {
           <X className="h-4 w-4 mr-1" />
           <span className="text-sm">Exit</span>
         </button>
+        <button 
+          onClick={() => window.location.href = '/admin'}
+          className="bg-blue-600 text-white hover:bg-blue-700 p-1.5 rounded-md transition-colors flex items-center space-x-1 px-3"
+        >
+          <Settings className="h-4 w-4 mr-1" />
+          <span className="text-sm">Admin</span>
+        </button>
       </div>
     </div>
   </div>
