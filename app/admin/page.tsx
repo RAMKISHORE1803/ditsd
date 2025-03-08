@@ -180,8 +180,9 @@ const handleFormSubmit = async (e: React.FormEvent) => {
   };
 
   // Handle opening the edit form
-  const handleEditRecord = (record: any, type: string) => {
+  const handleEditRecord = (record: any) => {
     const formattedData: any = { ...record };
+    const type = infrastructure.activeTab; // Get the type from the active tab
     
     // Extract latitude and longitude from location
     if (record.location && record.location.coordinates) {

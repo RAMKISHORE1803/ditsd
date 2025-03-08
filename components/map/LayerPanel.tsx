@@ -1,11 +1,20 @@
-// components/map/LayerPanel.jsx
+// components/map/LayerPanel.tsx
 "use client";
 
-import { useState } from 'react';
+import { useState, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, Layers, Radio, School, Building2, Droplets, Signal } from 'lucide-react';
 
-const LayerToggle = ({ label, active, onChange, icon, count }) => {
+// Type for layer toggle component props
+interface LayerToggleProps {
+  label: string;
+  active: boolean;
+  onChange: () => void;
+  icon: ReactNode;
+  count?: number;
+}
+
+const LayerToggle = ({ label, active, onChange, icon, count }: LayerToggleProps) => {
   return (
     <div className="flex items-center justify-between py-2 px-1">
       <div className="flex items-center gap-2">
@@ -31,7 +40,14 @@ const LayerToggle = ({ label, active, onChange, icon, count }) => {
   );
 };
 
-const LayerCategory = ({ title, children, initialExpanded = true }) => {
+// Type for layer category component props
+interface LayerCategoryProps {
+  title: string;
+  children: ReactNode;
+  initialExpanded?: boolean;
+}
+
+const LayerCategory = ({ title, children, initialExpanded = true }: LayerCategoryProps) => {
   const [isExpanded, setIsExpanded] = useState(initialExpanded);
   
   return (
@@ -66,7 +82,34 @@ const LayerCategory = ({ title, children, initialExpanded = true }) => {
   );
 };
 
-const LayerPanel = ({ activeLayers, onToggle, summary }) => {
+// Type for active layers
+interface ActiveLayers {
+  districts: boolean;
+  coverage: boolean;
+  towers: boolean;
+  schools: boolean;
+  hospitals: boolean;
+  waterBodies: boolean;
+  [key: string]: boolean; // Index signature for dynamic access
+}
+
+// Type for summary data
+interface SummaryData {
+  towers?: number;
+  schools?: number;
+  hospitals?: number;
+  waterBodies?: number;
+  [key: string]: number | undefined; // Index signature for dynamic access
+}
+
+// Type for layer panel component props
+interface LayerPanelProps {
+  activeLayers: ActiveLayers;
+  onToggle: (layerName: string) => void;
+  summary?: SummaryData;
+}
+
+const LayerPanel = ({ activeLayers, onToggle, summary }: LayerPanelProps) => {
   return (
     <motion.div 
       className="bg-slate-800/90 backdrop-blur-md border border-white/10 rounded-lg shadow-lg overflow-hidden"

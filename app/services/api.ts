@@ -13,17 +13,18 @@ export const getSession = async () => {
 };
 
 // Create a new record
-export const createRecord = async (tableName, data) => {
+export const createRecord = async (tableName: string, data: { created_by: string; }) => {
   return await addInfrastructureItem(tableName, data, data.created_by);
 };
 
 // Update an existing record
-export const updateRecord = async (tableName, id, data) => {
+export const updateRecord = async (tableName: string, id: string, data: { updated_by: any; created_by: any; }) => {
   return await updateInfrastructureItem(tableName, id, data, data.updated_by || data.created_by);
 };
 
 // Delete a record
-export const deleteRecord = async (tableName, id) => {
+// Delete a record
+export const deleteRecord = async (tableName: string, id: string, userId: string) => {
   const { data: item } = await supabase
     .from(tableName)
     .select('name')
@@ -32,9 +33,8 @@ export const deleteRecord = async (tableName, id) => {
     
   const itemName = item?.name || 'Unknown';
   
-  return await deleteInfrastructureItem(tableName, id, itemName, data.created_by);
+  return await deleteInfrastructureItem(tableName, id, itemName, userId);
 };
-
 export const exportToCSV = async (tableName: string, params: any) => {
   const { searchTerm = '', districtId = '' } = params;
   
@@ -110,7 +110,7 @@ export const exportToCSV = async (tableName: string, params: any) => {
     const { data: districts } = await supabase.from('districts').select('id,name');
     
     // Replace district_id with district name if available
-    const districtMap = {};
+    const districtMap: Record<string, string> = {};
     if (districts) {
       districts.forEach(district => {
         districtMap[district.id] = district.name;
@@ -515,7 +515,7 @@ export const getUsers = async () => {
 // Statistics and summary data
 export const getSummaryStatistics = async () => {
   try {
-    let districts = [];
+    let districts: any[] = [];
     try {
       districts = await getDistricts();
     } catch (error) {
@@ -709,6 +709,26 @@ export const addInfrastructureItem = async (
   return data;
 };
 
+// Add this function to your api.ts file
+export const getInfrastructureItemById = async (
+  tableName: string, 
+  itemId: string
+) => {
+  try {
+    const { data, error } = await supabase
+      .from(tableName)
+      .select('*')
+      .eq('id', itemId)
+      .single();
+    
+    if (error) throw error;
+    
+    return data;
+  } catch (error) {
+    console.error(`Error fetching ${tableName} item:`, error);
+    throw error;
+  }
+};
 export const updateInfrastructureItem = async (
   tableName: string, 
   itemId: string, 

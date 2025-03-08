@@ -98,18 +98,14 @@ export interface WaterBody {
   id: string;
   name: string;
   type: string;
+  location?: any; // Add this property
+  geometry?: any; // Add this property
+  longitude?: number;
+  latitude?: number;
   area_sqkm?: number;
   length_km?: number;
-  geometry?: any; // PostGIS geometry - This replaces location
-  district_id?: string;
   is_protected?: boolean;
-  notes?: string;
-  created_by?: string;
-  created_at?: string;
-  updated_at?: string;
-  // Additional properties for UI only (not in DB)
-  latitude?: number;
-  longitude?: number;
+  district_id?: string;
 }
 
 export interface UserProfile {

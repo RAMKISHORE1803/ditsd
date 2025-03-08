@@ -1,4 +1,4 @@
-// components/map/SearchBar.jsx
+// components/map/SearchBar.tsx
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
@@ -6,7 +6,23 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, Radio, School, Building2, X } from 'lucide-react';
 import { searchLocations } from '@/lib/api';
 
-const SearchResult = ({ result, onSelect, onClose }) => {
+// Type for search result
+interface SearchResultData {
+  id: string;
+  name: string;
+  description: string;
+  type: 'district' | 'tower' | 'school' | 'hospital' | string;
+  coordinates?: [number, number]; // [latitude, longitude]
+}
+
+// Type for search result component props
+interface SearchResultProps {
+  result: SearchResultData;
+  onSelect: (coordinates: [number, number]) => void;
+  onClose: () => void;
+}
+
+const SearchResult = ({ result, onSelect, onClose }: SearchResultProps) => {
   // Get icon based on result type
   const getIcon = () => {
     switch (result.type) {
@@ -44,17 +60,22 @@ const SearchResult = ({ result, onSelect, onClose }) => {
   );
 };
 
-const SearchBar = ({ onSelect }) => {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const searchRef = useRef(null);
+// Type for search bar component props
+interface SearchBarProps {
+  onSelect: (coordinates: [number, number]) => void;
+}
+
+const SearchBar = ({ onSelect }: SearchBarProps) => {
+  const [query, setQuery] = useState<string>('');
+  const [results, setResults] = useState<SearchResultData[]>([]);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const searchRef = useRef<HTMLDivElement | null>(null);
   
   // Handle click outside to close results
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };

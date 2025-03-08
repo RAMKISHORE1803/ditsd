@@ -7,7 +7,7 @@ import { X, Radio, School, Building2, MapPin, Wifi, Signal, AlertTriangle, Plus,
 import { fetchInfrastructureDetails } from '@/lib/api';
 
 // Feature Type Icons
-const FeatureIcon = ({ type }) => {
+const FeatureIcon = ({ type }: { type: 'tower' | 'school' | 'hospital' | 'district' | string }) => {
   switch (type) {
     case 'tower':
       return <Radio size={20} className="text-yellow-400" />;
@@ -35,7 +35,7 @@ const InfoSkeleton = () => (
 );
 
 // Feature Detail Row
-const DetailRow = ({ label, value, icon }) => (
+const DetailRow = ({ label, value, icon }: { label: string, value: string | number | undefined, icon: React.ReactNode }) => (
   <div className="flex items-start py-2 border-b border-white/10 last:border-0">
     <div className="flex-shrink-0 w-5 mr-2 mt-0.5">
       {icon}
@@ -48,7 +48,7 @@ const DetailRow = ({ label, value, icon }) => (
 );
 
 // Tower Details Component
-const TowerDetails = ({ details }) => (
+const TowerDetails = ({ details }: { details: any }) => (
   <>
     <DetailRow 
       label="Operator" 
@@ -95,7 +95,7 @@ const TowerDetails = ({ details }) => (
 );
 
 // School Details Component
-const SchoolDetails = ({ details }) => (
+const SchoolDetails = ({ details }: { details: any }) => (
   <>
     <DetailRow 
       label="Level" 
@@ -136,7 +136,7 @@ const SchoolDetails = ({ details }) => (
 );
 
 // Hospital Details Component
-const HospitalDetails = ({ details }) => (
+const HospitalDetails = ({ details }: { details: any }) => (
   <>
     <DetailRow 
       label="Type" 
@@ -177,7 +177,7 @@ const HospitalDetails = ({ details }) => (
 );
 
 // District Details Component
-const DistrictDetails = ({ details }) => (
+const DistrictDetails = ({ details }: { details: any }) => (
   <>
     <DetailRow 
       label="Region" 
@@ -218,7 +218,7 @@ const DistrictDetails = ({ details }) => (
 );
 
 // Main Information Panel Component
-const InfoPanel = ({ feature, onClose }) => {
+const InfoPanel = ({ feature, onClose }: { feature: any, onClose: () => void }) => {
   const [loading, setLoading] = useState(true);
   const [details, setDetails] = useState(null);
   

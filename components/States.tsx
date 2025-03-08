@@ -45,7 +45,7 @@ const DigitalInfrastructureStats = () => {
             <div className="h-28 w-0.5 bg-gradient-to-b from-transparent via-blue-600 to-transparent" />
             <div>
               <div className="text-3xl">
-                <NumberTicker value={stat.percentage} />%
+                <NumberTicker value={stat.percentage} className="" />%
               </div>
               <div className="mt-1 max-w-36 text-neutral-600 dark:text-zinc-300 md:mt-2">
                 {stat.description}
@@ -70,8 +70,13 @@ const NumberTicker = ({
   direction = "up",
   delay = 0,
   className,
+}: {
+  value: number;
+  direction?: "up" | "down";
+  delay?: number;
+  className?: string;
 }) => {
-  const ref = useRef(null);
+  const ref = useRef<HTMLSpanElement>(null);
   const motionValue = useMotionValue(direction === "down" ? value : 0);
   const springValue = useSpring(motionValue, {
     damping: 60,
@@ -91,7 +96,7 @@ const NumberTicker = ({
     springValue.on("change", (latest) => {
       if (ref.current) {
         ref.current.textContent = Intl.NumberFormat("en-US").format(
-          latest.toFixed(0)
+          Math.round(latest)
         );
       }
     })

@@ -120,14 +120,11 @@ export function useInfrastructure(userId?: string) {
       // Get the item name first for the audit log
       let itemName = 'Unknown';
       try {
-        const { data } = await supabase
-          .from(endpoint)
-          .select('name')
-          .eq('id', id)
-          .single();
+        // Use the new API function instead of direct supabase call
+        const item = await api.getInfrastructureItemById(endpoint, id);
         
-        if (data && data.name) {
-          itemName = data.name;
+        if (item && item.name) {
+          itemName = item.name;
         }
       } catch (e) {
         console.error('Error getting item name:', e);
@@ -144,7 +141,7 @@ export function useInfrastructure(userId?: string) {
       throw error;
     }
   };
-
+  
   // Load initial data - only if userId exists
   const loadDashboardData = useCallback(async () => {
     if (!userId) return; // Early return if no userId
@@ -315,7 +312,17 @@ export function useInfrastructure(userId?: string) {
           if (userId) {
             try {
               const data = await api.runCoverageAnalysis(undefined, 'telecom', userId);
-              setCoverageAnalyses(data || []);
+              // Add id property to each item to match CoverageAnalysis interface
+              const formattedData = (data || []).map((item: any) => ({
+                id: item.id || `${item.district_id}-${item.coverage_type}-${Date.now()}`,
+                district_id: item.district_id,
+                coverage_level: item.coverage_level,
+                percentage_covered: item.percentage_covered,
+                population_covered: item.population_covered,      
+                coverage_type: item.coverage_type,
+                last_calculated: item.last_calculated
+              }));
+              setCoverageAnalyses(formattedData);
             } catch (error) {
               console.error('Error loading coverage data:', error);
               setCoverageAnalyses([]);

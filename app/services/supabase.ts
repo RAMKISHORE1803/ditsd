@@ -1,9 +1,9 @@
 "use client";
 
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 // Initialize Supabase client with error handling
-const getSupabaseClient = () => {
+const getSupabaseClient = (): SupabaseClient => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -29,9 +29,10 @@ const getSupabaseClient = () => {
 };
 
 // Mock client for development when Supabase credentials are missing
-function createMockClient() {
+function createMockClient(): SupabaseClient {
   console.warn('Using mock Supabase client - data operations will return empty results');
   
+  // This is a simplified mock that implements the SupabaseClient interface
   return {
     auth: {
       getSession: async () => ({ data: { session: null }, error: null }),
@@ -57,11 +58,11 @@ function createMockClient() {
     functions: {
       invoke: async () => ({ data: null, error: null })
     }
-  };
-}
+  } as unknown as SupabaseClient; // Type assertion for the mock
+};
 
 // Export the Supabase client
-let supabase;
+let supabase: SupabaseClient;
 try {
   supabase = getSupabaseClient();
 } catch (error) {

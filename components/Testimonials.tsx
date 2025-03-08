@@ -1,35 +1,19 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 
-const Testimonial = () => {
-  return (
-    <div className="py-16 px-4 max-w-7xl mx-auto">
-      <div className="mx-auto mb-16 max-w-4xl text-center">
-        <h1 className="mb-6 text-3xl font-bold md:text-5xl">
-          Transforming Connectivity in Uganda with{" "}
-          <span className="bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
-            Digital Infrastructure Mapping
-          </span>
-        </h1>
-        <p className="text-base text-gray-600 dark:text-gray-300 md:text-xl">
-          Experts and organizations share their experiences using our mapping
-          platform to bridge connectivity gaps, enhance planning, and drive
-          socio-economic growth in Uganda.
-        </p>
-      </div>
+// Type for a testimonial item
+interface Testimonial {
+  name: string;
+  title: string;
+  organization: string;
+  description: string;
+  img: string;
+}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {testimonials.map((review) => (
-          <ReviewCard key={review.name} {...review} />
-        ))}
-      </div>
-    </div>
-  );
-};
+// Type for the ReviewCard component props
+interface ReviewCardProps extends Testimonial {}
 
-export default Testimonial;
-
-const ReviewCard = ({ img, name, title, organization, description }) => {
+const ReviewCard: React.FC<ReviewCardProps> = ({ img, name, title, organization, description }) => {
   return (
     <figure className="h-full flex flex-col rounded-xl border p-6 shadow-md hover:shadow-lg transition-shadow duration-300 bg-white dark:bg-gray-800">
       <div className="flex flex-row items-center gap-4 mb-4">
@@ -59,8 +43,36 @@ const ReviewCard = ({ img, name, title, organization, description }) => {
   );
 };
 
+const Testimonial: React.FC = () => {
+  return (
+    <div className="py-16 px-4 max-w-7xl mx-auto">
+      <div className="mx-auto mb-16 max-w-4xl text-center">
+        <h1 className="mb-6 text-3xl font-bold md:text-5xl">
+          Transforming Connectivity in Uganda with{" "}
+          <span className="bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
+            Digital Infrastructure Mapping
+          </span>
+        </h1>
+        <p className="text-base text-gray-600 dark:text-gray-300 md:text-xl">
+          Experts and organizations share their experiences using our mapping
+          platform to bridge connectivity gaps, enhance planning, and drive
+          socio-economic growth in Uganda.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {testimonials.map((review) => (
+          <ReviewCard key={review.name} {...review} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Testimonial;
+
 // Expanded testimonials with more entries to fill the grid
-const testimonials = [
+const testimonials: Testimonial[] = [
   {
     name: "Dr. Samuel Kato",
     title: "GIS Analyst",

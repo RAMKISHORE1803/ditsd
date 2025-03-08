@@ -3,13 +3,14 @@
 import { useState } from 'react';
 import { X, Save, Check, MapPin, Info } from 'lucide-react';
 import { 
-  ActiveTab, AuthUser, District,
   getSchoolLevelOptions, getSchoolTypeOptions,
   getHospitalTypeOptions, getTowerStatusOptions,
   getTowerTypeOptions, getConnectionTypeOptions,
   getPowerSourceOptions, getWaterBodyTypeOptions,
   getHospitalServicesOptions
 } from '@/app/utils/helper';
+// Import both types from types/index
+import { AuthUser, ActiveTab, District } from '@/types/index';
 
 interface AddEditFormProps {
   activeTab: ActiveTab;
@@ -17,7 +18,7 @@ interface AddEditFormProps {
   formData: any;
   setFormData: (data: any) => void;
   formErrors: Record<string, string>;
-  setFormErrors: (errors: Record<string, string>) => void;
+  setFormErrors: React.Dispatch<React.SetStateAction<Record<string, string>>>;
   jsonFields: any;
   setJsonFields: (fields: any) => void;
   formStep: number;
@@ -48,14 +49,14 @@ export default function AddEditForm({
   const updateFormData = (key: string, value: any) => {
     // Clear the error for this field when user updates it
     if (formErrors[key]) {
-      setFormErrors(prev => {
+      setFormErrors((prev: any) => {
         const newErrors = {...prev};
         delete newErrors[key];
         return newErrors;
       });
     }
     
-    setFormData(prev => ({
+    setFormData((prev: any) => ({
       ...prev,
       [key]: value
     }));
@@ -63,7 +64,7 @@ export default function AddEditForm({
   
   // Handle checkbox for service options
   const handleServiceCheckbox = (service: string, checked: boolean) => {
-    setJsonFields(prev => {
+    setJsonFields((prev: any) => {
       const updatedServices = { ...prev };
       
       if (!updatedServices.services) {

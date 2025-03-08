@@ -1,11 +1,19 @@
-// components/map/MapControls.jsx
+// components/map/MapControls.tsx
 "use client";
 
-import { useState } from 'react';
+import { useState, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { Layers, Home, Plus, Minus, Compass, Share2, Download } from 'lucide-react';
 
-const ControlButton = ({ icon, onClick, active, tooltip }) => {
+// Type for control button component props
+interface ControlButtonProps {
+  icon: ReactNode;
+  onClick: () => void;
+  active?: boolean;
+  tooltip?: string;
+}
+
+const ControlButton = ({ icon, onClick, active, tooltip }: ControlButtonProps) => {
   return (
     <motion.button
       whileTap={{ scale: 0.95 }}
@@ -28,7 +36,23 @@ const ControlButton = ({ icon, onClick, active, tooltip }) => {
   );
 };
 
-const MapControls = ({ onLayersPanelToggle, isLayerPanelOpen, mapRef }) => {
+// Type for Leaflet map reference
+interface LeafletMap {
+  _zoom: number;
+  setZoom: (zoom: number) => void;
+  setView: (center: [number, number], zoom: number) => void;
+  getCenter: () => { lat: number; lng: number };
+  getZoom: () => number;
+}
+
+// Type for map controls component props
+interface MapControlsProps {
+  onLayersPanelToggle: () => void;
+  isLayerPanelOpen: boolean;
+  mapRef: React.MutableRefObject<LeafletMap | null>;
+}
+
+const MapControls = ({ onLayersPanelToggle, isLayerPanelOpen, mapRef }: MapControlsProps) => {
   const [is3D, setIs3D] = useState(false);
   
   const handleZoomIn = () => {
@@ -65,7 +89,7 @@ const MapControls = ({ onLayersPanelToggle, isLayerPanelOpen, mapRef }) => {
       const url = new URL(window.location.href);
       url.searchParams.set('lat', center.lat.toFixed(5));
       url.searchParams.set('lng', center.lng.toFixed(5));
-      url.searchParams.set('zoom', zoom);
+      url.searchParams.set('zoom', zoom.toString());
       
       // Copy to clipboard
       navigator.clipboard.writeText(url.toString())
