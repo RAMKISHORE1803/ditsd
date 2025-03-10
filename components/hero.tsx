@@ -107,7 +107,7 @@ const Hero = () => {
             <div className="absolute inset-0 left-1/2 top-1/2 -z-10 size-3/4 -translate-x-1/2 -translate-y-1/2 blur-[10rem]" />
             <div className="relative overflow-hidden rounded-md bg-foreground/5 shadow-2xl ring-1 ring-border lg:rounded-xl">
               <Image
-                src={"https://www.bmz-digital.global/wp-content/uploads/resized/2023/01/ITU_interactive-terrestrial-transmission-map-1920x0-c-default.png"} // Create this image showing a map visualization
+                src={"https://static.vecteezy.com/system/resources/thumbnails/049/740/794/small_2x/aerial-view-of-europe-at-night-with-glowing-city-lights-and-network-connections-free-photo.jpeg"} // Create this image showing a map visualization
                 alt="Uganda infrastructure mapping visualization"
                 width={1200}
                 height={600}

@@ -332,6 +332,7 @@ export async function analyzeCoverage(
         percentage_covered: parseFloat(coveragePercentage.toFixed(1)),
         population_covered: populationCovered,
         last_calculated: new Date().toISOString(),
+        coverage_type: ''
       };
       
       console.log(`Analysis result for ${district.name}:`, {

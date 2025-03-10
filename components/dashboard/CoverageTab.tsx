@@ -4,12 +4,15 @@ import { useState } from 'react';
 import { 
   BarChart2, Download, MapPin, User, Calendar, 
   Info, ChevronDown, FileText, Upload, Clock, 
-  HelpCircle, Compass, Layers
+  HelpCircle, Compass, Layers, ChevronUp,
+  Maximize2, Minimize2
 } from 'lucide-react';
 import { AuthUser, District, CoverageAnalysis } from '../../types';
 import * as coverageService from '@/app/services/coverageAnalysis';
 import { exportToCSV } from '@/app/services/api';
 import { toast } from 'react-toastify';
+import CoverageVisualizations from '@/components/CoverageVisualizations';
+import DistrictCoverageMap from '@/components/DistrictCoverageMap';
 
 interface CoverageTabProps {
   user: AuthUser;
@@ -36,16 +39,19 @@ export default function CoverageTab({
   const [analysisDepth, setAnalysisDepth] = useState<'standard' | 'detailed'>('standard');
   const [includeDemographics, setIncludeDemographics] = useState<boolean>(false);
   const [includeOverlap, setIncludeOverlap] = useState<boolean>(true);
+  const [showTable, setShowTable] = useState<boolean>(true);
+  const [fullScreenViz, setFullScreenViz] = useState<boolean>(false);
+  const [showDetailedMap, setShowDetailedMap] = useState<boolean>(false);
   
   // Helper function to get district name by ID
-  const getDistrictName = (districtId?: string) => {
+  const getDistrictName = (districtId?: string): string => {
     if (!districtId) return 'All Districts';
     const district = districts.find(d => d.id === districtId);
     return district ? district.name : 'Unknown';
   };
 
   // Enhanced run analysis function
-  const runAnalysis = async () => {
+  const runAnalysis = async (): Promise<void> => {
     if (isRunning) return;
     
     setIsRunning(true);
@@ -74,7 +80,7 @@ export default function CoverageTab({
   };
 
   // Export the coverage data
-  const exportCoverage = async () => {
+  const exportCoverage = async (): Promise<void> => {
     try {
       toast.info('Preparing coverage analysis export...');
       
@@ -128,104 +134,238 @@ export default function CoverageTab({
     }
   };
 
+  // Handle district selection from the map
+  const handleSelectDistrict = (districtId: string): void => {
+    setFilterRegion(districtId);
+    setShowDetailedMap(false);
+  };
+
+  if (fullScreenViz) {
+    return (
+      <>
+        <div className="fixed top-4 right-4 z-50">
+          <button
+            onClick={() => setFullScreenViz(false)}
+            className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 transition-colors"
+          >
+            <Minimize2 size={20} className="text-gray-600" />
+          </button>
+        </div>
+        <CoverageVisualizations
+          coverageAnalyses={coverageAnalyses}
+          districts={districts}
+          analysisType={analysisType}
+          fullScreen={true}
+        />
+      </>
+    );
+  }
+
+  if (showDetailedMap) {
+    return (
+      <>
+        <div className="fixed top-4 right-4 z-50">
+          <button
+            onClick={() => setShowDetailedMap(false)}
+            className="bg-white p-2 rounded-full shadow-lg hover:bg-gray-100 transition-colors"
+          >
+            <Minimize2 size={20} className="text-gray-600" />
+          </button>
+        </div>
+        <div className="fixed inset-0 z-50 p-6 bg-white">
+          <DistrictCoverageMap
+            coverageAnalyses={coverageAnalyses}
+            districts={districts}
+            selectedDistrictId={filterRegion}
+            onSelectDistrict={handleSelectDistrict}
+          />
+        </div>
+      </>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      {/* Main coverage analysis card */}
-      <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-medium flex items-center text-gray-800">
-            <BarChart2 size={20} className="mr-2 text-blue-600" />
-            <span>Coverage Analysis</span>
-          </h3>
-          <div className="flex space-x-2">
-            <button
-              onClick={exportCoverage}
-              className="flex items-center space-x-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg text-sm transition-colors"
-            >
-              <Download size={16} className="mr-2" />
-              <span>Export Report</span>
-            </button>
-          </div>
-        </div>
-        
-        {coverageAnalyses && coverageAnalyses.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">District</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Coverage Level</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Coverage %</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Population Covered</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Type</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Last Updated</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 bg-white">
-                {coverageAnalyses.map((coverage, index) => (
-                  <tr key={coverage.id || index} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-4 py-3 text-sm font-medium text-gray-900">
-                      <div className="flex items-center">
-                        <MapPin size={16} className="text-blue-600 mr-2" />
-                        {getDistrictName(coverage.district_id)}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-sm">
-                      <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
-                        coverage.coverage_level === 'High' ? 'bg-green-100 text-green-800' :
-                        coverage.coverage_level === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
-                        {coverage.coverage_level}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-900">
-                      <div className="flex items-center">
-                        <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden mr-2">
-                          
-                        </div>
-                        <span>{coverage.percentage_covered}%</span>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 text-sm text-gray-900">
-                      <div className="flex items-center">
-                        <User size={16} className="text-blue-600 mr-2" />
-                        <span>{coverage.population_covered?.toLocaleString() || 'N/A'}</span>
-                      </div>
-                    </td>
-                   
-                    <td className="px-4 py-3 text-sm text-gray-600">
-                      <div className="flex items-center">
-                        <Calendar size={14} className="mr-2" />
-                        {new Date(coverage.last_calculated || Date.now()).toLocaleString()}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <div className="py-12 text-center flex flex-col items-center bg-gray-50 rounded-lg">
-            <div className="w-16 h-16 rounded-full bg-yellow-100 flex items-center justify-center mb-4">
-              <Info size={32} className="text-yellow-500" />
-            </div>
-            <h4 className="text-lg font-medium text-gray-800 mb-2">No coverage analysis data available</h4>
-            <p className="text-sm text-gray-600 max-w-md mx-auto mb-4">
-              Run a coverage analysis to see results here.
-            </p>
-            {(user.role === 'admin' || user.role === 'editor') && (
+      {/* Map Visualization */}
+      {coverageAnalyses && coverageAnalyses.length > 0 && (
+        <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-medium flex items-center text-gray-800">
+              <MapPin size={20} className="mr-2 text-blue-600" />
+              <span>District Coverage Map</span>
+            </h3>
+            <div className="flex space-x-2">
               <button
-                onClick={runAnalysis}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition-colors flex items-center"
+                onClick={() => setShowDetailedMap(true)}
+                className="flex items-center space-x-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs transition-colors"
               >
-                <BarChart2 size={16} className="mr-2" />
-                <span>Run First Analysis</span>
+                <Maximize2 size={14} className="mr-1" />
+                <span>Expand Map</span>
               </button>
-            )}
+            </div>
           </div>
-        )}
-      </div>
+          
+          <DistrictCoverageMap
+            coverageAnalyses={coverageAnalyses}
+            districts={districts}
+            selectedDistrictId={filterRegion}
+            onSelectDistrict={handleSelectDistrict}
+          />
+        </div>
+      )}
+      
+      {/* Visualization Section */}
+      {coverageAnalyses && coverageAnalyses.length > 0 && (
+        <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-lg font-medium flex items-center text-gray-800">
+              <BarChart2 size={20} className="mr-2 text-blue-600" />
+              <span>Coverage Insights</span>
+            </h3>
+            <div className="flex space-x-2">
+              <button
+                onClick={() => setFullScreenViz(true)}
+                className="flex items-center space-x-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs transition-colors"
+              >
+                <Maximize2 size={14} className="mr-1" />
+                <span>Expand</span>
+              </button>
+              <button
+                onClick={() => setShowTable(!showTable)}
+                className="flex items-center space-x-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs transition-colors"
+              >
+                {showTable ? (
+                  <>
+                    <ChevronUp size={14} className="mr-1" />
+                    <span>Hide Table</span>
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown size={14} className="mr-1" />
+                    <span>Show Table</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+          
+          <CoverageVisualizations
+            coverageAnalyses={coverageAnalyses}
+            districts={districts}
+            analysisType={analysisType}
+          />
+        </div>
+      )}
+      
+      {/* Main coverage analysis card */}
+      {showTable && (
+        <div className="bg-white p-6 rounded-xl shadow-md border border-gray-200">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-medium flex items-center text-gray-800">
+              <BarChart2 size={20} className="mr-2 text-blue-600" />
+              <span>Coverage Analysis</span>
+            </h3>
+            <div className="flex space-x-2">
+              <button
+                onClick={exportCoverage}
+                className="flex items-center space-x-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg text-sm transition-colors"
+              >
+                <Download size={16} className="mr-2" />
+                <span>Export Report</span>
+              </button>
+            </div>
+          </div>
+          
+          {coverageAnalyses && coverageAnalyses.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">District</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Coverage Level</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Coverage %</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Population Covered</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Type</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Last Updated</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 bg-white">
+                  {coverageAnalyses.map((coverage, index) => (
+                    <tr key={coverage.id || index} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-4 py-3 text-sm font-medium text-gray-900">
+                        <div className="flex items-center">
+                          <MapPin size={16} className="text-blue-600 mr-2" />
+                          {getDistrictName(coverage.district_id)}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-sm">
+                        <span className={`inline-flex px-2 py-1 text-xs rounded-full ${
+                          coverage.coverage_level === 'High' ? 'bg-green-100 text-green-800' :
+                          coverage.coverage_level === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-red-100 text-red-800'
+                        }`}>
+                          {coverage.coverage_level}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-900">
+                        <div className="flex items-center">
+                          <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden mr-2">
+                            <div 
+                              className={`h-full ${
+                                coverage.coverage_level === 'High' ? 'bg-green-500' :
+                                coverage.coverage_level === 'Medium' ? 'bg-yellow-500' :
+                                'bg-red-500'
+                              }`}
+                              style={{ width: `${coverage.percentage_covered}%` }}
+                            ></div>
+                          </div>
+                          <span>{coverage.percentage_covered}%</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-900">
+                        <div className="flex items-center">
+                          <User size={16} className="text-blue-600 mr-2" />
+                          <span>{coverage.population_covered?.toLocaleString() || 'N/A'}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-sm">
+                        <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
+                          {coverage.coverage_type || analysisType}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-600">
+                        <div className="flex items-center">
+                          <Calendar size={14} className="mr-2" />
+                          {coverage.last_calculated ? new Date(coverage.last_calculated).toLocaleString() : new Date().toLocaleString()}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="py-12 text-center flex flex-col items-center bg-gray-50 rounded-lg">
+              <div className="w-16 h-16 rounded-full bg-yellow-100 flex items-center justify-center mb-4">
+                <Info size={32} className="text-yellow-500" />
+              </div>
+              <h4 className="text-lg font-medium text-gray-800 mb-2">No coverage analysis data available</h4>
+              <p className="text-sm text-gray-600 max-w-md mx-auto mb-4">
+                Run a coverage analysis to see results here.
+              </p>
+              {(user.role === 'admin' || user.role === 'editor') && (
+                <button
+                  onClick={runAnalysis}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm transition-colors flex items-center"
+                >
+                  <BarChart2 size={16} className="mr-2" />
+                  <span>Run First Analysis</span>
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      )}
       
       {/* Enhanced analysis options card */}
       {(user.role === 'admin' || user.role === 'editor') && (
@@ -421,8 +561,8 @@ export default function CoverageTab({
             <div className="flex items-center text-xs text-gray-600">
               <FileText size={14} className="mr-1" />
               <span>
-                Last analysis: {coverageAnalyses.length > 0 
-                  ? new Date(coverageAnalyses[0].last_calculated || Date.now()).toLocaleDateString() 
+                Last analysis: {coverageAnalyses.length > 0 && coverageAnalyses[0].last_calculated
+                  ? new Date(coverageAnalyses[0].last_calculated).toLocaleDateString() 
                   : 'Never'
                 }
               </span>

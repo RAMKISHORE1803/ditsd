@@ -128,6 +128,7 @@ export interface AuditLog {
 }
 
 export interface CoverageAnalysis {
+  coverage_type: string;
   id: string;
   district_id?: string;
   coverage_level: string;
